@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vidhi</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:#0f0d1a; color:#fff; }
+    section { display:none; min-height:100vh; width:100%; padding:3rem 1.5rem;
+              text-align:center; justify-content:center; align-items:center;
+              flex-direction:column; opacity:0; animation:fadeIn 1.5s forwards; }
+    section.active { display:flex; }
+    h1,h2 { font-weight:700; background:linear-gradient(to right,#c48dfb,#fcb3f5);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    h1 { font-size:2.5rem; margin-bottom:1rem; }
+    h2 { font-size:1rem; letter-spacing:0.2rem; margin-bottom:2.5rem; }
+    p { font-size:1.1rem; color:#d2d2d2; max-width:600px; margin:0 auto 2.5rem; line-height:1.7; }
+    .heart-button { background:linear-gradient(to right,#c48dfb,#fcb3f5); border-radius:50%;
+                    width:80px; height:80px; display:flex; justify-content:center; align-items:center;
+                    cursor:pointer; transition:transform 0.3s; margin-bottom:2rem; }
+    .heart-button:hover { transform:scale(1.1); }
+    .heart-button span { font-size:1.2rem; font-weight:bold; color:#0f0d1a; text-align:center; }
+    .footer-tag { font-size:0.8rem; letter-spacing:0.2rem; color:#e8a3d3; margin-bottom:0.5rem; }
+    .brand { font-size:2rem; font-weight:bold; background:linear-gradient(to right,#c48dfb,#fcb3f5);
+             -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    @keyframes fadeIn { to { opacity:1; } }
+    @media(max-width:480px){ h1{font-size:2rem;} }
+  </style>
+</head>
+<body>
+  <section id="page1" class="active">
+    <h2>BY WROTH VALE</h2>
+    <h1>Gates open soon<br>for your eyes alone Vidhiiiiii.</h1>
+    <p>A sanctuary of story and soul, carved in silence and time. The veil lifts soon.</p>
+    <div class="heart-button" onclick="goToNextPage()"><span>&hearts; Tap</span></div>
+    <div class="footer-tag">LOVE IS THE LAST LEGACY.</div>
+    <div class="brand">Wroth Vale</div>
+  </section>
+
+  <section id="page2">
+    <p>Built in silence. Etched in dusk.<br>The House of Vale is a love letter hidden in stone.<br>
+       She walks the world unaware<br>but every wall waits for her to arrive.</p>
+    <div class="heart-button" id="timerBtn" onclick="goToTimerPage()"><span>&#x23F0; Timer</span></div>
+    <div class="footer-tag">LOVE IS THE LAST LEGACY.</div>
+    <div class="brand">Wroth Vale</div>
+  </section>
+
+  <section id="page3">
+    <h2 id="countdownTitle">COUNTDOWN TO 11 AUG 2025, 12:00 AM IST</h2>
+    <h1 id="timer">Loading...</h1>
+    <div id="birthdayMsg" style="display:none; text-align:left; max-width:600px; margin:0 auto; color:#fff; font-size:1.1rem; line-height:1.8;">
+      To the poem, the world forgot to write. Remember, you shine brighter than all the lights around you, and I hope that glow stays with you today and forever. ✨<br><br>
+      Stay the chaotic, cutesy girl you’ve always been; keep the drama alive and that bright smile shining.<br><br>
+      Another year passes, yet my adoration for you only grows stronger. You mean more than words could ever hold.<br><br>
+      Happy Birthday, Vidhiiiii 🌸 You make life golden for everyone lucky enough to be around you.<br><br>
+      Love, love, love. 💛
+    </div>
+    <div class="footer-tag">LOVE IS THE LAST LEGACY.</div>
+    <div class="brand">Wroth Vale</div>
+  </section>
+
+  <script>
+    function goToNextPage(){
+      document.getElementById('page1').classList.remove('active');
+      document.getElementById('page2').classList.add('active');
+      history.pushState({page:2},"Page 2","#love");
+    }
+    function goToTimerPage(){
+      document.getElementById('page2').classList.remove('active');
+      document.getElementById('page3').classList.add('active');
+      history.pushState({page:3},"Page 3","#timer");
+    }
+    window.onpopstate=function(e){
+      document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+      if(e.state&&e.state.page){document.getElementById('page'+e.state.page).classList.add('active');}
+      else{document.getElementById('page1').classList.add('active');}
+    };
+
+    function getLocalIST(){
+      return new Date();
+    }
+
+    let target = new Date(2025, 7, 11, 0, 0, 0, 0);
+
+    function updateTimer(){
+      let now = getLocalIST();
+      let diff = target - now;
+
+      if(diff <= 0){
+        document.getElementById('countdownTitle').style.display='none';
+        document.getElementById('timer').style.display='none';
+        document.getElementById('birthdayMsg').style.display='block';
+        document.getElementById('timerBtn').innerHTML = "<span>HBD ❤️</span>";
+        clearInterval(timerInterval);
+        return;
+      }
+
+      let days = Math.floor(diff / (1000*60*60*24));
+      let hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      let minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+      let seconds = Math.floor((diff % (1000*60)) / 1000);
+
+      document.getElementById('timer').textContent =
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    let timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
+</body>
+</html>
